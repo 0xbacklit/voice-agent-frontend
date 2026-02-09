@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0d0f12;
+  --foreground: #f5f6f8;
+  --muted: #9aa4b2;
+  --panel: #15181d;
+  --panel-strong: #1f2430;
+  --accent: #f9b24c;
+  --accent-2: #6be7ff;
+  --stroke: #262b36;
+  --success: #44d19d;
+  --danger: #ff6b6b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+}
+
+body {
+  background: radial-gradient(
+    circle at top left,
+    #142034 0%,
+    #0d0f12 45%,
+    #0b0c10 100%
+  );
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+.display-font {
+  font-family: var(--font-display), serif;
+}
+
+.glass-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(31, 36, 48, 0.95),
+    rgba(13, 15, 18, 0.9)
+  );
+  border: 1px solid var(--stroke);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.soft-glow {
+  box-shadow: 0 0 40px rgba(107, 231, 255, 0.25);
+}
+
+.toast-card {
+  box-shadow:
+    0 28px 70px rgba(4, 10, 18, 0.75),
+    0 12px 30px rgba(15, 23, 36, 0.55),
+    0 0 0 1px rgba(74, 88, 118, 0.35),
+    0 0 32px rgba(70, 196, 255, 0.18);
+  animation: toast-in 0.25s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
