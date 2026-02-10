@@ -24,6 +24,7 @@ export async function connectLiveKit(
   options?: {
     videoContainer?: HTMLElement | null;
     onVideoChange?: (hasVideo: boolean) => void;
+    enableVideo?: boolean;
   },
 ): Promise<{
   room: Room;
@@ -60,7 +61,11 @@ export async function connectLiveKit(
           // If autoplay is blocked, the user interaction (Start Conversation) will unlock it.
         });
       }
-      if (track.kind === Track.Kind.Video && options?.videoContainer) {
+      if (
+        track.kind === Track.Kind.Video &&
+        options?.videoContainer &&
+        options.enableVideo !== false
+      ) {
         options.videoContainer.replaceChildren();
         const element = track.attach();
         element.setAttribute("data-livekit-remote-video", "true");

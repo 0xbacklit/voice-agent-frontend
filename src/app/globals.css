@@ -62,16 +62,27 @@ html {
     0 12px 30px rgba(15, 23, 36, 0.55),
     0 0 0 1px rgba(74, 88, 118, 0.35),
     0 0 32px rgba(70, 196, 255, 0.18);
-  animation: toast-in 0.25s ease-out;
 }
 
-@keyframes toast-in {
-  from {
+@keyframes toast-pop {
+  0% {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-8px) scale(0.98);
   }
-  to {
+  12% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
+  88% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+.animate-toast {
+  animation: toast-pop 5.2s ease-in-out forwards;
 }

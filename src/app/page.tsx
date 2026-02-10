@@ -29,7 +29,7 @@ export default function Home() {
 
   const toolLabel = (name: string) => {
     const labels: Record<string, string> = {
-      identify_user: "Identifed User",
+      identify_user: "Identified User",
       fetch_slots: "Viewed Available Slots",
       book_appointment: "Booked Appointment",
       retrieve_appointments: "Retrieved Appointments",
@@ -124,7 +124,9 @@ export default function Home() {
   }, [sessionId]);
   useEffect(() => {
     if (!toastTool) return;
-    const timeout = setTimeout(() => setToastTool(null), 4500);
+    const timeout = setTimeout(() => {
+      setToastTool(null);
+    }, 5200);
     return () => clearTimeout(timeout);
   }, [toastTool]);
 
@@ -135,7 +137,9 @@ export default function Home() {
 
   useEffect(() => {
     if (!toastSummary) return;
-    const timeout = setTimeout(() => setToastSummary(false), 5000);
+    const timeout = setTimeout(() => {
+      setToastSummary(false);
+    }, 5200);
     return () => clearTimeout(timeout);
   }, [toastSummary]);
 
@@ -166,6 +170,7 @@ export default function Home() {
         {
           videoContainer: videoContainerRef.current,
           onVideoChange: setHasVideo,
+          enableVideo: !audioOnlyMode,
         },
       );
       setRoom(livekitRoom);
@@ -318,7 +323,7 @@ export default function Home() {
           )}
         </section>
         {toastTool && (
-          <div className="toast-card fixed right-6 top-24 z-40 w-[280px] rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--panel-strong)] p-4">
+          <div className="toast-card fixed right-6 top-24 z-40 w-[280px] animate-toast rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--panel-strong)] p-4">
             <p className="text-xs uppercase tracking-[0.25em] text-[color:var(--muted)]">
               Tool Call
             </p>
@@ -328,12 +333,10 @@ export default function Home() {
             <p className="mt-1 text-xs text-[color:var(--muted)]">
               {toastTool.detail}
             </p>
-            <div className="mt-3 flex items-center justify-between text-xs text-[color:var(--muted)]">
-              <span>
-                {toastTool.status === "completed" ? "" : toastTool.status}
-              </span>
+            <div className="mt-3 flex items-center justify-end text-xs text-[color:var(--muted)]">
               <button
                 onClick={() => {
+                  setToastTool(null);
                   setShowToolDrawer(true);
                   setShowSummaryDrawer(false);
                 }}
@@ -345,7 +348,7 @@ export default function Home() {
           </div>
         )}
         {toastSummary && (
-          <div className="toast-card fixed right-6 top-[120px] z-40 w-[280px] rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--panel-strong)] p-4">
+          <div className="toast-card fixed right-6 top-[120px] z-40 w-[280px] animate-toast rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--panel-strong)] p-4">
             <p className="text-xs uppercase tracking-[0.25em] text-[color:var(--muted)]">
               Summary Ready
             </p>
@@ -355,6 +358,7 @@ export default function Home() {
             <div className="mt-3 text-right">
               <button
                 onClick={() => {
+                  setToastSummary(false);
                   setShowSummaryDrawer(true);
                   setShowToolDrawer(false);
                 }}
@@ -390,7 +394,7 @@ export default function Home() {
                 Close
               </button>
             </div>
-            <div className="mt-4 h-[calc(100%-60px)] overflow-y-auto pr-2">
+            <div className="mt-4 h-[calc(100%-60px)] space-y-3 overflow-y-auto pr-2">
               {toolCalls.length === 0 && (
                 <p className="text-sm text-[color:var(--muted)]">
                   No tool calls yet. Start a session to stream events here.
@@ -405,17 +409,6 @@ export default function Home() {
                     <span className="font-semibold">
                       {toolLabel(tool.name)}
                     </span>
-                    {tool.status !== "completed" && (
-                      <span
-                        className={`text-xs uppercase tracking-[0.2em] ${
-                          tool.status === "active"
-                            ? "text-[color:var(--accent)]"
-                            : "text-[color:var(--muted)]"
-                        }`}
-                      >
-                        {tool.status}
-                      </span>
-                    )}
                   </div>
                   <p className="mt-2 text-sm text-[color:var(--muted)]">
                     {tool.detail}
@@ -450,9 +443,11 @@ export default function Home() {
                 Close
               </button>
             </div>
-            <p className="mt-2 text-sm text-[color:var(--muted)]">
-              Generated at call end • 10s SLA
-            </p>
+            {summary && (
+              <p className="mt-2 text-sm text-[color:var(--muted)]">
+                Generated at call end • 10s SLA
+              </p>
+            )}
             <div className="mt-4 h-[calc(100%-120px)] overflow-y-auto pr-2">
               <div className="rounded-2xl border border-dashed border-[color:var(--stroke)] bg-[color:var(--panel)] p-4 text-sm text-[color:var(--muted)]">
                 {summary
@@ -487,26 +482,6 @@ export default function Home() {
                 >
                   Copy Summary
                 </button>
-              )}
-              {summary && (
-                <div className="mt-4 flex flex-wrap items-center gap-3 text-xs">
-                  {summary.preferences.map((pref) => (
-                    <span
-                      key={pref}
-                      className="rounded-full border border-[color:var(--stroke)] bg-[color:var(--panel-strong)] px-3 py-1"
-                    >
-                      Preference: {pref}
-                    </span>
-                  ))}
-                  {summary.booked_appointments.map((appt) => (
-                    <span
-                      key={appt.id}
-                      className="rounded-full border border-[color:var(--stroke)] bg-[color:var(--panel-strong)] px-3 py-1"
-                    >
-                      Booking: {appt.date} {appt.time}
-                    </span>
-                  ))}
-                </div>
               )}
             </div>
           </aside>
